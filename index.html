@@ -287,8 +287,10 @@
         <!-- Artist name (can be changed) -->
         <h2 class="artist-name">GH0ST_ENGINEER</h2>
 
+        <!-- Toggle player button -->
+        <button id="toggle-player-btn" style="position:absolute; left:50%; top:62%; transform:translateX(-50%); z-index:20; background:#222; color:var(--glow-color-1); border:none; border-radius:5px; padding:0.6em 1.4em; font-size:1.1em; cursor:pointer;">Show Player</button>
         <!-- Audio player for album tracks -->
-        <div class="audio-player">
+        <div class="audio-player" id="audio-player-panel" style="display:none;">
             <!-- Track selector -->
             <label for="track-select">Select a track:</label>
             <select id="track-select">
@@ -458,6 +460,22 @@
 
         // Start petal generation when the page is fully loaded
         window.onload = startPetalGeneration;
+
+        // Toggle audio player visibility logic (all comments in English)
+        const toggleBtn = document.getElementById('toggle-player-btn');
+        const playerPanel = document.getElementById('audio-player-panel');
+        let playerVisible = false;
+        toggleBtn.addEventListener('click', function() {
+            playerVisible = !playerVisible;
+            playerPanel.style.display = playerVisible ? 'flex' : 'none';
+            toggleBtn.textContent = playerVisible ? 'Hide Player' : 'Show Player';
+        });
+        // Optionally, hide player when a track ends (uncomment if needed)
+        // audio.addEventListener('ended', function() {
+        //     playerVisible = false;
+        //     playerPanel.style.display = 'none';
+        //     toggleBtn.textContent = 'Show Player';
+        // });
     </script>
 
 </body>
