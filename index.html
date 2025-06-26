@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Album Cover: Digitalia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Chakra+Petch:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --asphalt-dark: #1a1a1a;
+            --asphalt-light: #2a2a2e;
+            --crack-color: #0d0d0d;
+            --glow-color-1: #00f2ff;
+            --glow-color-2: #ff00e6;
+            --text-color: #e0e0e0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--crack-color);
+            margin: 0;
+            font-family: 'Chakra Petch', sans-serif;
+            overflow: hidden;
+        }
+
+        .album-container {
+            width: 90vmin;
+            max-width: 600px;
+            height: 90vmin;
+            max-height: 600px;
+            background: linear-gradient(to bottom, var(--asphalt-light), var(--asphalt-dark));
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #333;
+            border-radius: 10px; /* Added rounded corners */
+        }
+
+        /* Background noise for asphalt texture */
+        .album-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><g fill-opacity="0.03" fill="%23fff"><rect x="0" y="0" width="800" height="800"/><rect x="100" y="100" width="10" height="10"/><rect x="200" y="200" width="5" height="5"/><rect x="350" y="400" width="8" height="8"/><rect x="500" y="150" width="3" height="3"/><rect x="650" y="300" width="6" height="6"/><rect x="700" y="50" width="4" height="4"/><rect x="50" y="600" width="9" height="9"/><rect x="450" y="700" width="2" height="2"/></g></svg>');
+            animation: noise 2s steps(10) infinite;
+            opacity: 0.5;
+            border-radius: 10px; /* Applied rounded corners to pseudo-element */
+        }
+
+        @keyframes noise {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -10%); }
+            20% { transform: translate(-15%, 5%); }
+            30% { transform: translate(7%, -25%); }
+            40% { transform: translate(-5%, 25%); }
+            50% { transform: translate(-15%, 10%); }
+            60% { transform: translate(15%, 0%); }
+            70% { transform: translate(0%, 15%); }
+            80% { transform: translate(3%, 35%); }
+            90% { transform: translate(-10%, 10%); }
+        }
+
+        /* Asphalt crack */
+        .crack {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            top: -10%;
+            left: -10%;
+            background: radial-gradient(circle at 50% 50%, transparent 20%, var(--crack-color) 20.5%, var(--crack-color) 22%, transparent 22.5%);
+            transform: rotate(15deg) scale(1.5);
+            filter: blur(2px);
+        }
+
+        /* Digital flower */
+        .digital-flower {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            animation: gentle-bob 8s ease-in-out infinite;
+        }
+
+        @keyframes gentle-bob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .petal {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid; /* Border color will be set by JS */
+            border-radius: 50% 0;
+            /* Shadow will be set by JS */
+            animation: pulse 4s infinite ease-in-out;
+            transform-origin: 50% 50%; /* Ensures rotation around the center */
+        }
+
+        .core {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px 10px white, inset 0 0 10px var(--glow-color-1);
+            animation: pulse-core 2s infinite ease-in-out;
+            z-index: 10; /* Ensures core is on top of petals */
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; filter: blur(1px); }
+            50% { opacity: 1; filter: blur(2px); }
+        }
+        @keyframes pulse-core {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 20px 10px white, inset 0 0 10px var(--glow-color-1); }
+            50% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 30px 15px white, inset 0 0 5px var(--glow-color-2); }
+        }
+
+        /* Text */
+        .title {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 10vmin, 4rem);
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            text-shadow: 0 0 5px #fff, 0 0 10px var(--glow-color-1), 0 0 15px var(--glow-color-1);
+            animation: glitch 3s linear infinite;
+        }
+        
+        /* Glitch effect */
+        .title::before,
+        .title::after {
+            content: 'Digitalia';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .title::before {
+            left: 2px;
+            text-shadow: -1px 0 var(--glow-color-2);
+            animation: glitch-anim-1 2s infinite linear reverse;
+        }
+
+        .title::after {
+            left: -2px;
+            text-shadow: -1px 0 var(--glow-color-1), 1px 1px var(--glow-color-2);
+            animation: glitch-anim-2 3s infinite linear reverse;
+        }
+
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px, 0) skew(0deg); }
+            65% { transform: translate(-1px, 0) skew(1deg); }
+            66% { transform: translate(0, 0) skew(0); }
+        }
+        
+        @keyframes glitch-anim-1 {
+            0% { clip-path: inset(15% 0 86% 0); }
+            20% { clip-path: inset(50% 0 23% 0); }
+            40% { clip-path: inset(13% 0 6% 0); }
+            60% { clip-path: inset(70% 0 13% 0); }
+            80% { clip-path: inset(33% 0 23% 0); }
+            100% { clip-path: inset(5% 0 90% 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(83% 0 6% 0); }
+            20% { clip-path: inset(25% 0 40% 0); }
+            40% { clip-path: inset(40% 0 33% 0); }
+            60% { clip-path: inset(13% 0 5% 0); }
+            80% { clip-path: inset(77% 0 13% 0); }
+            100% { clip-path: inset(45% 0 50% 0); }
+        }
+
+        .artist-name {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: clamp(0.8rem, 3vmin, 1.2rem);
+            color: var(--text-color);
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="album-container">
+        <!-- Asphalt crack -->
+        <div class="crack"></div>
+
+        <!-- Digital flower - petals will be generated by JS -->
+        <div class="digital-flower">
+            <!-- Flower core remains here so it's not removed by JS -->
+            <div class="core"></div>
+        </div>
+
+        <!-- Album title with glitch effect -->
+        <h1 class="title">Digitalia</h1>
+
+        <!-- Artist name (can be changed) -->
+        <h2 class="artist-name">GH0ST_ENGINEER</h2>
+    </div>
+
+    <script>
+        /**
+         * Generates a random number of petals for the digital flower.
+         * Petals are created dynamically and added to the DOM.
+         */
+        function generatePetals() {
+            const flowerContainer = document.querySelector('.digital-flower');
+            
+            // Remove all existing petals, leaving the core
+            Array.from(flowerContainer.children).forEach(child => {
+                if (!child.classList.contains('core')) {
+                    child.remove();
+                }
+            });
+
+            // Generate a random number of petals from 5 to 9
+            const numPetals = Math.floor(Math.random() * (9 - 5 + 1)) + 5;
+            const angleIncrement = 360 / numPetals; // Rotation angle for each petal
+
+            // Create and add petals
+            for (let i = 0; i < numPetals; i++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                petal.style.transform = `rotate(${i * angleIncrement}deg)`;
+
+                // Apply different colors and shadows to create a two-tone effect
+                if (i % 2 !== 0) { // For odd petals
+                    petal.style.borderColor = 'var(--glow-color-2)';
+                    petal.style.boxShadow = 'inset 0 0 10px var(--glow-color-2), 0 0 15px var(--glow-color-2)';
+                    petal.style.animationDelay = `${-2 * (i / numPetals)}s`; // Delay for animation variety
+                } else { // For even petals
+                    petal.style.borderColor = 'var(--glow-color-1)';
+                    petal.style.boxShadow = 'inset 0 0 10px var(--glow-color-1), 0 0 15px var(--glow-color-1)';
+                }
+                flowerContainer.prepend(petal); // Add petals before the core
+            }
+        }
+
+        let petalInterval; // Variable to store the interval ID
+
+        /**
+         * Starts the petal generation process with a random interval.
+         * The interval is restarted after each generation.
+         */
+        function startPetalGeneration() {
+            // If a previous interval exists, clear it
+            if (petalInterval) {
+                clearInterval(petalInterval);
+            }
+            
+            generatePetals(); // Generate petals immediately on start
+
+            // Generate a random interval from 10 to 20 seconds
+            const randomInterval = Math.floor(Math.random() * (20 - 10 + 1)) + 10;
+            console.log(`Next petal regeneration in ${randomInterval} seconds.`);
+            
+            // Set the new interval
+            petalInterval = setInterval(() => {
+                generatePetals(); // Generate new petals
+                startPetalGeneration(); // Restart the interval with a new random time
+            }, randomInterval * 1000); // Interval in milliseconds
+        }
+
+        // Start petal generation when the page is fully loaded
+        window.onload = startPetalGeneration;
+    </script>
+
+</body>
+</html>
