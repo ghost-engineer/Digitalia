@@ -208,6 +208,65 @@
             letter-spacing: 0.1em;
         }
 
+        /* Audio player styles */
+        .audio-player {
+            position: absolute;
+            left: 50%;
+            top: 70%;
+            transform: translate(-50%, 0);
+            width: 90%;
+            max-width: 400px;
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px #0008;
+            padding: 1.2em 1em 1.5em 1em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.7em;
+        }
+
+        .audio-player label {
+            color: var(--text-color);
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 1em;
+            margin-bottom: 0.2em;
+        }
+
+        .audio-player select {
+            width: 100%;
+            padding: 0.4em;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background: #222;
+            color: var(--text-color);
+            font-family: 'Chakra Petch', sans-serif;
+        }
+
+        .audio-player audio {
+            width: 100%;
+            margin-top: 0.5em;
+            background: #111;
+            border-radius: 4px;
+        }
+
+        .audio-player button {
+            background: #222;
+            color: var(--glow-color-1);
+            border: none;
+            border-radius: 3px;
+            padding: 0.4em 1em;
+            cursor: pointer;
+        }
+
+        .audio-player #now-playing {
+            color: var(--text-color);
+            font-size: 0.95em;
+            margin-top: 0.3em;
+            opacity: 0.8;
+            font-family: 'Chakra Petch', sans-serif;
+        }
+
     </style>
 </head>
 <body>
@@ -227,6 +286,34 @@
 
         <!-- Artist name (can be changed) -->
         <h2 class="artist-name">GH0ST_ENGINEER</h2>
+
+        <!-- Audio player for album tracks -->
+        <div class="audio-player">
+            <!-- Track selector -->
+            <label for="track-select">Select a track:</label>
+            <select id="track-select">
+                <option value="01 - Neon Rain.mp3">01 - Neon Rain</option>
+                <option value="02 - Glass Eyes.mp3">02 - Glass Eyes</option>
+                <option value="03 - Scrap Metal Heart (life).mp3">03 - Scrap Metal Heart (life)</option>
+                <option value="04 - Ghost in the Wire.mp3">04 - Ghost in the Wire</option>
+                <option value="05 - Digitalia.mp3">05 - Digitalia</option>
+                <option value="06 - The Algorithm's Hymn.mp3">06 - The Algorithm's Hymn</option>
+                <option value="07 - Forgotten Frequencies.mp3">07 - Forgotten Frequencies</option>
+                <option value="08 - Porcelain Smile.mp3">08 - Porcelain Smile</option>
+                <option value="09 - Signal Through the Noise.mp3">09 - Signal Through the Noise</option>
+                <option value="10 - Asphalt Bloom.mp3">10 - Asphalt Bloom</option>
+            </select>
+            <!-- Audio controls -->
+            <audio id="audio" controls>
+                <source id="audio-source" src="album/01 - Neon Rain.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <div style="display:flex; gap:1em; margin-top:0.2em;">
+                <button id="prev-btn" title="Previous track">Prev</button>
+                <button id="next-btn" title="Next track">Next</button>
+            </div>
+            <div id="now-playing">Now playing: 01 - Neon Rain</div>
+        </div>
     </div>
 
     <script>
@@ -291,6 +378,83 @@
                 startPetalGeneration(); // Restart the interval with a new random time
             }, randomInterval * 1000); // Interval in milliseconds
         }
+
+        // Audio player logic (all comments in English)
+        const trackList = [
+            "01 - Neon Rain.mp3",
+            "02 - Glass Eyes.mp3",
+            "03 - Scrap Metal Heart (life).mp3",
+            "04 - Ghost in the Wire.mp3",
+            "05 - Digitalia.mp3",
+            "06 - The Algorithm's Hymn.mp3",
+            "07 - Forgotten Frequencies.mp3",
+            "08 - Porcelain Smile.mp3",
+            "09 - Signal Through the Noise.mp3",
+            "10 - Asphalt Bloom.mp3"
+        ];
+        const trackNames = [
+            "01 - Neon Rain",
+            "02 - Glass Eyes",
+            "03 - Scrap Metal Heart (life)",
+            "04 - Ghost in the Wire",
+            "05 - Digitalia",
+            "06 - The Algorithm's Hymn",
+            "07 - Forgotten Frequencies",
+            "08 - Porcelain Smile",
+            "09 - Signal Through the Noise",
+            "10 - Asphalt Bloom"
+        ];
+        const audio = document.getElementById('audio');
+        const audioSource = document.getElementById('audio-source');
+        const trackSelect = document.getElementById('track-select');
+        const nowPlaying = document.getElementById('now-playing');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let currentTrack = 0;
+
+        // Update audio source and UI
+        function setTrack(index) {
+            currentTrack = index;
+            audioSource.src = `album/${trackList[index]}`;
+            audio.load();
+            nowPlaying.textContent = `Now playing: ${trackNames[index]}`;
+            trackSelect.selectedIndex = index;
+        }
+
+        // Handle track selection from dropdown
+        trackSelect.addEventListener('change', function() {
+            setTrack(this.selectedIndex);
+            audio.play();
+        });
+
+        // Previous track button
+        prevBtn.addEventListener('click', function() {
+            let idx = currentTrack - 1;
+            if (idx < 0) idx = trackList.length - 1;
+            setTrack(idx);
+            audio.play();
+        });
+
+        // Next track button
+        nextBtn.addEventListener('click', function() {
+            let idx = currentTrack + 1;
+            if (idx >= trackList.length) idx = 0;
+            setTrack(idx);
+            audio.play();
+        });
+
+        // Auto-play next track when current ends
+        audio.addEventListener('ended', function() {
+            let idx = currentTrack + 1;
+            if (idx >= trackList.length) idx = 0;
+            setTrack(idx);
+            audio.play();
+        });
+
+        // Initialize player on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            setTrack(0);
+        });
 
         // Start petal generation when the page is fully loaded
         window.onload = startPetalGeneration;
