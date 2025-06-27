@@ -287,8 +287,21 @@
         <!-- Artist name (can be changed) -->
         <h2 class="artist-name">GH0ST_ENGINEER</h2>
 
-        <!-- Toggle player button -->
-        <button id="toggle-player-btn" style="position:absolute; left:50%; top:62%; transform:translateX(-50%); z-index:20; background:#222; color:var(--glow-color-1); border:none; border-radius:5px; padding:0.6em 1.4em; font-size:1.1em; cursor:pointer;">Show Player</button>
+        <!-- Top left control buttons -->
+        <div style="position:absolute; top:1.2em; left:1.2em; z-index:30; display:flex; gap:0.6em;">
+            <button id="toggle-player-btn" style="background:#222; color:var(--glow-color-1); border:none; border-radius:5px; padding:0.3em 0.7em; font-size:0.7em; cursor:pointer;">Show Player</button>
+            <button id="link-panel-btn" style="background:#222; color:var(--glow-color-2); border:none; border-radius:5px; padding:0.3em 0.7em; font-size:0.7em; cursor:pointer;">Link to...</button>
+        </div>
+        <!-- Link panel (hidden by default) -->
+        <div id="link-panel" style="display:none; position:absolute; top:0; left:0; width:100%; background:rgba(20,20,20,0.97); z-index:40; padding:1.2em 0 0.7em 0; text-align:center; box-shadow:0 2px 12px #000a;">
+            <button id="close-link-panel" style="position:absolute; right:1.2em; top:1.2em; background:#222; color:#fff; border:none; border-radius:3px; padding:0.2em 0.7em; font-size:1em; cursor:pointer;">×</button>
+            <div style="display:flex; flex-direction:column; gap:0.7em; align-items:center; justify-content:center; margin-top:0.2em;">
+                <a href="https://t.me/if_g_nil" target="_blank" style="color:var(--glow-color-1); font-size:1.1em; text-decoration:none;">Telegram</a>
+                <a href="https://www.youtube.com/@if_g_nil" target="_blank" style="color:var(--glow-color-2); font-size:1.1em; text-decoration:none;">YouTube</a>
+                <div style="color:var(--text-color); font-size:1em; word-break:break-all;">TRC20 wallet:<br><span style="font-family:monospace; color:#fff;">TXHrz8hLXaWhKqDRgM6dk1JCMDuRRMhZAH</span></div>
+            </div>
+        </div>
+
         <!-- Audio player for album tracks -->
         <div class="audio-player" id="audio-player-panel" style="display:none;">
             <!-- Track selector -->
@@ -470,12 +483,17 @@
             playerPanel.style.display = playerVisible ? 'flex' : 'none';
             toggleBtn.textContent = playerVisible ? 'Hide Player' : 'Show Player';
         });
-        // Optionally, hide player when a track ends (uncomment if needed)
-        // audio.addEventListener('ended', function() {
-        //     playerVisible = false;
-        //     playerPanel.style.display = 'none';
-        //     toggleBtn.textContent = 'Show Player';
-        // });
+
+        // Link panel logic (all comments in English)
+        const linkBtn = document.getElementById('link-panel-btn');
+        const linkPanel = document.getElementById('link-panel');
+        const closeLinkPanel = document.getElementById('close-link-panel');
+        linkBtn.addEventListener('click', function() {
+            linkPanel.style.display = 'block';
+        });
+        closeLinkPanel.addEventListener('click', function() {
+            linkPanel.style.display = 'none';
+        });
     </script>
 
 </body>
